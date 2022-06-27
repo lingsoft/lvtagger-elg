@@ -1,0 +1,4 @@
+testFile = outputfile.txt
+loadClassifier = models/lv-ner-model.ser.gz
+inputEncoding = utf-8
+outputEncoding = utf-8
