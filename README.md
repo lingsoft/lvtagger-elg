@@ -2,7 +2,7 @@
 
 This git repository contains [ELG compatible](https://european-language-grid.readthedocs.io/en/stable/all/A3_API/LTInternalAPI.html) Flask based REST API for [LV Tagger](https://github.com/PeterisP/LVTagger) – morphological tagger and named entity recognition module for the Latvian language (v. 2.2.1). LV Tagger is licensed under the [full GPL](https://github.com/PeterisP/LVTagger/blob/master/LICENSE.txt). The software was developed by Pēteris Paikens from the University of Latvia, Institute of Mathematics and Computer science.
 
-You can call two endpoints: `tagger` and `ner`. `tagger` groups tokens by their part of speech, which is the first letter of the morphological tag, shows their starting and ending indexes, lemma ('Pamatforma') and other morphological information depending on the part of speech (e.g. 'Skaitlis' (number), 'Locījums' (case), 'Dzimte' (gender), etc.) `ner` groups tokens by their named entity label (person, organization, location, event, product, profession) and shows their starting and ending indexes.
+You can call two endpoints: `tagger` and `ner`. `tagger` groups tokens by their part of speech, which is the first letter of the morphological tag, shows their starting and ending indexes, lemma ('Pamatforma') and other morphological information depending on the part of speech (e.g. 'Skaitlis' (number), 'Locījums' (case), 'Dzimte' (gender), etc). `ner` groups tokens by their named entity label (person, organization, location, event, product, profession) and shows their starting and ending indexes.
 
 This ELG API was developed in EU's CEF project [Microservices at your service](https://www.lingsoft.fi/en/microservices-at-your-service-bridging-gap-between-nlp-research-and-industry).
 
