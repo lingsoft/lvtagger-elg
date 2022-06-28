@@ -1,13 +1,13 @@
 from elg import FlaskService
-from elg.model import AnnotationsResponse, Failure, TextRequest
-from elg.model.base import StandardMessages
+from elg.model import AnnotationsResponse
 import subprocess
 import io
 import os
+from os.path import exists
 
 class LVTagger(FlaskService):
     
-    def convert_outputs(self, outputs, content, endpoint):
+    def convert_outputs(self, outputs, content, endpoint, incorrect_result):
         annotations = {}
         offset = 0
         tokens = [x for x in outputs.split("\n") if x != ""]
@@ -18,7 +18,12 @@ class LVTagger(FlaskService):
             elif endpoint == "ner":
                 word = token_split[0]
             features = token_split[3:]
-            start = content.find(word) + offset
+            found_index = content.find(word)
+            if found_index == -1 and incorrect_result == False:
+                print("The input contains unsupported characters (probably smileys), \
+                       and the results might be incorrect.")
+                incorrect_result = True
+            start = found_index + offset
             end = start + len(word)
             content = content[end - offset:]
             offset = end
@@ -48,12 +53,14 @@ class LVTagger(FlaskService):
                                 "end": end,
                             }
                     annotations.setdefault(label, []).append(annot)
-        os.remove("inputfile.txt")
-        if endpoint == "ner":
+        if exists("inputfile.txt"):
+            os.remove("inputfile.txt")
+        if exists("outputfile.txt"):
             os.remove("outputfile.txt")
         return AnnotationsResponse(annotations = annotations)
 
     def process_text(self, content):
+        incorrect_result = False
         with io.open("inputfile.txt",'w',encoding='utf8') as f:
             f.write(content.content)
         endpoint = self.url_param('endpoint')
@@ -72,7 +79,7 @@ class LVTagger(FlaskService):
                                   shell=True, stdout=subprocess.PIPE)
         output, errors = p.communicate()
         output_utf8 = output.decode("utf-8")
-        return self.convert_outputs(output_utf8, content.content, endpoint)
+        return self.convert_outputs(output_utf8, content.content, endpoint, incorrect_result)
 
 flask_service = LVTagger(name = "LVTagger", path = "/process/<endpoint>")
 app = flask_service.app
