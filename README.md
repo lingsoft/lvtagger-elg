@@ -91,3 +91,7 @@ NER
   }
 }
 ```
+
+## Warning
+
+Some characters (e.g. smileys) are not supported and may result into incorrect output. 
