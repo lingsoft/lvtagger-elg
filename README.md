@@ -6,9 +6,11 @@ You can call two endpoints: `tagger` and `ner`. `tagger` groups tokens by their 
 
 This ELG API was developed in EU's CEF project [Microservices at your service](https://www.lingsoft.fi/en/microservices-at-your-service-bridging-gap-between-nlp-research-and-industry).
 
-## Local development
+## Obtaining the jar
 
-Download [tagger-2.2.1-jar-with-dependencies.jar](https://search.maven.org/remotecontent?filepath=lv/ailab/morphology/tagger/2.2.1/tagger-2.2.1-jar-with-dependencies.jar) to the project directory or build using Maven from the [source](https://github.com/PeterisP/LVTagger).
+Download [tagger-2.2.1-jar-with-dependencies.jar](https://search.maven.org/remotecontent?filepath=lv/ailab/morphology/tagger/2.2.1/tagger-2.2.1-jar-with-dependencies.jar) or build using Maven from the [source](https://github.com/PeterisP/LVTagger) and copy the jar to the project directory.
+
+## Local development
 
 Setup virtualenv, dependencies
 ```
