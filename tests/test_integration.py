@@ -45,7 +45,7 @@ class TestTaggerIntegration(unittest.TestCase):
         self.assertIn('annotations', response["response"])
 
     def test_tagger_with_too_large_request(self):
-        large_text = self.text * 601
+        large_text = self.text * 800
         response = call_api(self.endpoint, large_text)
         self.assertEqual(response['failure']['errors'][0]['code'],
                          'elg.request.too.large')
@@ -82,7 +82,7 @@ class TestNERIntegration(unittest.TestCase):
         self.assertIn('annotations', response["response"])
 
     def test_ner_with_too_large_request(self):
-        large_text = self.text * 601
+        large_text = self.text * 800
         response = call_api(self.endpoint, large_text)
         self.assertEqual(response['failure']['errors'][0]['code'],
                          'elg.request.too.large')
