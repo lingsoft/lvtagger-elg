@@ -12,7 +12,7 @@ MAX_CHAR = 15000
 
 
 class LVTagger(FlaskService):
-    
+
     def convert_outputs(self, outputs, content, endpoint, incorrect_result):
         annotations = {}
         offset = 0
@@ -25,7 +25,7 @@ class LVTagger(FlaskService):
                 word = token_split[0]
             features = token_split[3:]
             found_index = content.find(word)
-            if found_index == -1 and incorrect_result == False:
+            if found_index == -1 and not incorrect_result:
                 print("The input contains unsupported characters (probably smileys), \
                         and the results might be incorrect.")
                 incorrect_result = True
@@ -42,7 +42,7 @@ class LVTagger(FlaskService):
                 if len(features) > 2:
                     features_split = features[2].split("|")
                     for x in features_split:
-                        [k,v] = x.split("=")
+                        [k, v] = x.split("=")
                         if v != "":
                             feature_dict[k.replace(" ", "_")] = v
                 annot = {
@@ -53,37 +53,35 @@ class LVTagger(FlaskService):
             elif endpoint == "ner":
                 label = token_split[2]
                 if label != "O":
-                    annot = {
-                                "start": start,
-                                "end": end,}
+                    annot = {"start": start, "end": end}
                     annotations.setdefault(label, []).append(annot)
         if exists("inputfile.txt"):
             os.remove("inputfile.txt")
         if exists("outputfile.txt"):
             os.remove("outputfile.txt")
-        return AnnotationsResponse(annotations = annotations)
+        return AnnotationsResponse(annotations=annotations)
 
     def process_text(self, request: TextRequest):
         content = request.content
         if len(content) > MAX_CHAR:
             error = StandardMessages.generate_elg_request_too_large()
             return Failure(errors=[error])
-        with io.open("inputfile.txt",'w',encoding='utf8') as f:
+        with io.open("inputfile.txt", 'w', encoding='utf8') as f:
             f.write(content)
         endpoint = self.url_param('endpoint')
         if endpoint == "tagger":
             p = subprocess.Popen('/java/bin/java -cp "tagger.jar" \
-                                  -Xmx2048m lv.lumii.morphotagger.MorphoPipe <inputfile.txt', 
-                                  shell=True, stdout=subprocess.PIPE)
+                                  -Xmx2048m lv.lumii.morphotagger.MorphoPipe <inputfile.txt',
+                                 shell=True, stdout=subprocess.PIPE)
         elif endpoint == "ner":
             p = subprocess.Popen('/java/bin/java -cp "tagger.jar" \
                                   -Xmx2048m lv.lumii.morphotagger.MorphoPipe <inputfile.txt \
                                   >outputfile.txt', shell=True, stdout=subprocess.PIPE)
-            p.wait() # without this the second subprocess starts too early and returns nothing
+            p.wait()  # without this the second subprocess starts too early and returns nothing
             p = subprocess.Popen('/java/bin/java -mx1g -Dfile.encoding=utf-8 -cp \
                                   "tagger.jar" \
-                                  edu.stanford.nlp.ie.crf.CRFClassifier -prop lv-ner.prop', \
-                                  shell=True, stdout=subprocess.PIPE)
+                                  edu.stanford.nlp.ie.crf.CRFClassifier -prop lv-ner.prop',
+                                 shell=True, stdout=subprocess.PIPE)
         else:
             error = StandardMessages.generate_elg_service_not_found(
                     params=[endpoint])
@@ -91,8 +89,9 @@ class LVTagger(FlaskService):
         output, errors = p.communicate()
         output_utf8 = output.decode("utf-8")
         incorrect_result = False
-        return self.convert_outputs(output_utf8, content, endpoint, incorrect_result)
+        return self.convert_outputs(
+                output_utf8, content, endpoint, incorrect_result)
 
 
-flask_service = LVTagger(name = "LVTagger", path = "/process/<endpoint>")
+flask_service = LVTagger(name="LVTagger", path="/process/<endpoint>")
 app = flask_service.app
