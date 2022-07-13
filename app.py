@@ -4,7 +4,11 @@ import os
 from os.path import exists
 
 from elg import FlaskService
-from elg.model import TextRequest, AnnotationsResponse
+from elg.model import TextRequest, AnnotationsResponse, Failure
+from elg.model.base import StandardMessages
+
+
+MAX_CHAR = 15000
 
 
 class LVTagger(FlaskService):
@@ -60,8 +64,10 @@ class LVTagger(FlaskService):
         return AnnotationsResponse(annotations = annotations)
 
     def process_text(self, request: TextRequest):
-        incorrect_result = False
         content = request.content
+        if len(content) > MAX_CHAR:
+            error = StandardMessages.generate_elg_request_too_large()
+            return Failure(errors=[error])
         with io.open("inputfile.txt",'w',encoding='utf8') as f:
             f.write(content)
         endpoint = self.url_param('endpoint')
@@ -79,9 +85,12 @@ class LVTagger(FlaskService):
                                   edu.stanford.nlp.ie.crf.CRFClassifier -prop lv-ner.prop', \
                                   shell=True, stdout=subprocess.PIPE)
         else:
-            print("TODO return failure")
+            error = StandardMessages.generate_elg_service_not_found(
+                    params=[endpoint])
+            return Failure(errors=[error])
         output, errors = p.communicate()
         output_utf8 = output.decode("utf-8")
+        incorrect_result = False
         return self.convert_outputs(output_utf8, content, endpoint, incorrect_result)
 
 
