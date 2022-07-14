@@ -55,14 +55,23 @@ docker run -d -p <port>:8000 --init lvtagger
 ## Example call
 
 ```
-curl -X POST -H 'Content-Type: application/json' http://localhost:8000/process/<endpoint> -d '{"type":"text","content":"Sofija dzīvo Rīgā."}'
+curl -H 'Content-Type: application/json' -d @sample.json http://localhost:8000/process/<endpoint>
 ```
 
 `endpoint` can be `tagger` or `ner`.
 
+### sample.json
+
+```json
+{
+    "type": "text",
+    "content": "Mārtiņš Bondars ir dzimis 1971. gada 31. decembrī, Rīgā."
+}
+```
+
 ### Response
 
-Tagger
+#### Tagger
 
 ```json
 {
@@ -72,18 +81,18 @@ Tagger
       "n": [
         {
           "start": 0,
-          "end": 6,
+          "end": 7,
           "features": {
-            "tag1": "npfsn_",
-            "tag2": "npfsn4",
+            "tag1": "npmsn_",
+            "tag2": "npmsn1",
             "Īpašvārda_veids": "Priekšvārds",
             "Skaitlis": "Vienskaitlis",
-            "Vārds": "Sofija",
-            "Leksēmas_nr": "1034177",
-            "Skaits": "5422",
+            "Vārds": "Mārtiņš",
+            "Leksēmas_nr": "1036923",
+            "Skaits": "13954",
             "Lietvārda_tips": "Īpašvārds",
-            "Pamatforma": "Sofija",
-            "Galotnes_nr": "75",
+            "Pamatforma": "Mārtiņš",
+            "Galotnes_nr": "14",
             "Avots": "VVC_paplašinātais_vārdadienu_saraksts_2014-10-31",
             "Nobīde_rindkopā": "0",
             "Vārdšķira": "Lietvārds",
@@ -91,111 +100,60 @@ Tagger
             "Minēšana": "Nav",
             "Lielo_burtu_lietojums": "Sākas_ar_lielo_burtu",
             "Locījums": "Nominatīvs",
-            "Dzimte": "Sieviešu",
-            "Vārdgrupas_nr": "7",
-            "Deklinācija": "4"
+            "Dzimte": "Vīriešu",
+            "Vārdgrupas_nr": "2",
+            "Deklinācija": "1"
           }
         },
-        {
-          "start": 13,
-          "end": 17,
-          "features": {
-            "tag1": "npfsl_",
-            "tag2": "npfsl4",
-            "Īpašvārda_veids": "Vietvārds",
-            "Skaitlis": "Vienskaitlis",
-            "Vārds": "Rīgā",
-            "Leksēmas_nr": "1101861",
-            "Lietvārda_tips": "Īpašvārds",
-            "Atstarpes_pirms": "_",
-            "Pamatforma": "Rīga",
-            "Galotnes_nr": "79",
-            "Avots": "LĢIS",
-            "Nobīde_rindkopā": "13",
-            "Vārdšķira": "Lietvārds",
-            "Mija": "0",
-            "Minēšana": "Nav",
-            "Lielo_burtu_lietojums": "Sākas_ar_lielo_burtu",
-            "Locījums": "Lokatīvs",
-            "Dzimte": "Sieviešu",
-            "Vārdgrupas_nr": "7",
-            "Deklinācija": "4"
-          }
-        }
-      ],
-      "v": [
-        {
-          "start": 7,
-          "end": 12,
-          "features": {
-            "tag1": "vm_ip__30__",
-            "tag2": "vmnipi230an",
-            "Laiks": "Tagadne",
-            "Konjugācija": "2",
-            "Skaitlis": "Nepiemīt",
-            "Šķirkļa_ID": "79002",
-            "Vārds": "dzīvo",
-            "Persona": "3",
-            "Darbības_vārda_tips": "Patstāvīgs_darbības_vārds",
-            "Šķirkļa_cilvēklasāmais_ID": "dzīvot:1",
-            "Atgriezeniskums": "Nē",
-            "Leksēmas_nr": "81176",
-            "Atstarpes_pirms": "_",
-            "Pamatforma": "dzīvot",
-            "FreeText": "-oju,_-o,_-o,_pag._-oju;_intrans.",
-            "Galotnes_nr": "228",
-            "Noliegums": "Nē",
-            "Transitivitāte": "Intransitīvs",
-            "Nobīde_rindkopā": "7",
-            "Vārdšķira": "Darbības_vārds",
-            "Mija": "0",
-            "Minēšana": "Nav",
-            "Vārdgrupas_nr": "16",
-            "Izteiksme": "Īstenības",
-            "Kārta": "Darāmā"
-          }
-        }
-      ],
-      "z": [
-        {
-          "start": 17,
-          "end": 18,
-          "features": {
-            "tag1": "zs",
-            "tag2": "zs",
-            "Galotnes_nr": "2092",
-            "Vārds": ".",
-            "Nobīde_rindkopā": "17",
-            "Vārdšķira": "Pieturzīme",
-            "Pieturzīmes_tips": "Punkts",
-            "Mija": "0",
-            "Minēšana": "Nav",
-            "Vārdgrupas_nr": "37",
-            "Leksēmas_nr": "1101217",
-            "Pamatforma": "."
-          }
-        }
+        ...
       ]
     }
   }
 }
 ```
 
-NER
+More information about
+[part-of-speech tags](https://peteris.rocks/blog/latvian-part-of-speech-tagging/).
+
+#### NER
 
 ```json
 {
   "response": {
     "type": "annotations",
     "annotations": {
-      "location": [
+      "person": [
         {
           "start": 0,
-          "end": 6
+          "end": 7
         },
         {
-          "start": 13,
-          "end": 17
+          "start": 8,
+          "end": 15
+        }
+      ],
+      "time": [
+        {
+          "start": 26,
+          "end": 31
+        },
+        {
+          "start": 32,
+          "end": 36
+        },
+        {
+          "start": 37,
+          "end": 40
+        },
+        {
+          "start": 41,
+          "end": 49
+        }
+      ],
+      "location": [
+        {
+          "start": 51,
+          "end": 55
         }
       ]
     }
