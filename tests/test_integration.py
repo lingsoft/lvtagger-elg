@@ -17,7 +17,7 @@ class TestEndpoint(unittest.TestCase):
 
     def setUp(self):
         self.endpoint = "wrong"
-        self.text = "Sofija dzīvo Rīgā. "
+        self.text = "Mārtiņš Bondars ir dzimis 1971. gada 31. decembrī, Rīgā."
 
     def test_invalid_endpoint(self):
         response = call_api(self.endpoint, self.text)
@@ -29,7 +29,7 @@ class TestTaggerIntegration(unittest.TestCase):
 
     def setUp(self):
         self.endpoint = "tagger"
-        self.text = "Sofija dzīvo Rīgā. "
+        self.text = "Mārtiņš Bondars ir dzimis 1971. gada 31. decembrī, Rīgā."
 
     def test_tagger_response_type(self):
         response = call_api(self.endpoint, self.text)
@@ -37,7 +37,7 @@ class TestTaggerIntegration(unittest.TestCase):
 
     def test_tagger_response_content(self):
         response = call_api(self.endpoint, self.text)
-        for entity in ("n", "v", "z"):
+        for entity in ("n", "v", "x", "z"):
             self.assertIn(entity, response["response"]["annotations"])
 
     def test_tagger_with_empty_request(self):
@@ -45,7 +45,8 @@ class TestTaggerIntegration(unittest.TestCase):
         self.assertIn('annotations', response["response"])
 
     def test_tagger_with_too_large_request(self):
-        large_text = self.text * 800
+        text = self.text + " "
+        large_text = text * 270
         response = call_api(self.endpoint, large_text)
         self.assertEqual(response['failure']['errors'][0]['code'],
                          'elg.request.too.large')
@@ -58,7 +59,7 @@ class TestTaggerIntegration(unittest.TestCase):
     def test_tagger_with_special_characters(self):
         spec_text = "\N{grinning face}\u4e01\u0009" + self.text + "\u0008"
         response = call_api(self.endpoint, spec_text)
-        gpe = response["response"]["annotations"]["n"][1]
+        gpe = response["response"]["annotations"]["n"][4]
         self.assertEqual(spec_text[gpe["start"]:gpe["end"]], "Rīgā")
 
 
@@ -66,7 +67,7 @@ class TestNERIntegration(unittest.TestCase):
 
     def setUp(self):
         self.endpoint = "ner"
-        self.text = "Sofija dzīvo Rīgā. "
+        self.text = "Mārtiņš Bondars ir dzimis 1971. gada 31. decembrī, Rīgā."
 
     def test_ner_response_type(self):
         response = call_api(self.endpoint, self.text)
@@ -74,7 +75,7 @@ class TestNERIntegration(unittest.TestCase):
 
     def test_ner_response_content(self):
         response = call_api(self.endpoint, self.text)
-        for entity in ("location",):
+        for entity in ("person", "time", "location"):
             self.assertIn(entity, response["response"]["annotations"])
 
     def test_ner_with_empty_request(self):
@@ -82,7 +83,8 @@ class TestNERIntegration(unittest.TestCase):
         self.assertIn('annotations', response["response"])
 
     def test_ner_with_too_large_request(self):
-        large_text = self.text * 800
+        text = self.text + " "
+        large_text = text * 270
         response = call_api(self.endpoint, large_text)
         self.assertEqual(response['failure']['errors'][0]['code'],
                          'elg.request.too.large')
@@ -95,7 +97,7 @@ class TestNERIntegration(unittest.TestCase):
     def test_ner_with_special_characters(self):
         spec_text = "\N{grinning face}\u4e01\u0009" + self.text + "\u0008"
         response = call_api(self.endpoint, spec_text)
-        gpe = response["response"]["annotations"]["location"][1]
+        gpe = response["response"]["annotations"]["location"][0]
         self.assertEqual(spec_text[gpe["start"]:gpe["end"]], "Rīgā")
 
 
