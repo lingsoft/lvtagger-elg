@@ -114,6 +114,6 @@ process = None
 @app.before_first_request
 def setup():
     global process
-    java_call = ["java", "-cp", "tagger-2.2.1-jar-with-dependencies.jar", "-Xmx2048m", # /java/bin/java
+    java_call = ["/java/bin/java", "-cp", "tagger-2.2.1-jar-with-dependencies.jar", "-Xmx2048m",
                  "lv.lumii.morphotagger.MorphoPipe"]
     process = Popen(java_call, stdin=PIPE, stdout=PIPE, text=True)
