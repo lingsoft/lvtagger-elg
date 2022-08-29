@@ -27,7 +27,7 @@ COPY --chown=elg:elg --from=venv-build /opt/venv /opt/venv
 USER elg:elg
 WORKDIR /elg
 COPY --chown=elg:elg --from=jre-build /app/tagger-2.2.1-jar-with-dependencies.jar /elg/
-COPY --chown=elg:elg app.py docker-entrypoint.sh lv-ner.prop /elg/
+COPY --chown=elg:elg app.py docker-entrypoint.sh /elg/
 ENV PATH="/opt/venv/bin:$PATH"
 
 ENV WORKERS=1
