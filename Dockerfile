@@ -3,8 +3,8 @@ WORKDIR /app
 # Binutils for objcopy, needed by jlink.
 RUN apt-get update && \
     apt-get install -y --no-install-recommends binutils wget tini && \
-    wget -q -O tagger.jar https://search.maven.org/remotecontent?filepath=lv/ailab/morphology/tagger/2.2.1/tagger-2.2.1-jar-with-dependencies.jar
-RUN jdeps --print-module-deps --ignore-missing-deps tagger.jar > java.modules
+    wget -q -O tagger-2.2.1-jar-with-dependencies.jar https://search.maven.org/remotecontent?filepath=lv/ailab/morphology/tagger/2.2.1/tagger-2.2.1-jar-with-dependencies.jar
+RUN jdeps --print-module-deps --ignore-missing-deps tagger-2.2.1-jar-with-dependencies.jar > java.modules
 RUN jlink --strip-debug  --add-modules "$(cat java.modules)" --output /java
 
 FROM python:3.9-slim as venv-build
@@ -26,11 +26,11 @@ COPY --chown=elg:elg --from=venv-build /opt/venv /opt/venv
 
 USER elg:elg
 WORKDIR /elg
-COPY --chown=elg:elg --from=jre-build /app/tagger.jar /elg/
+COPY --chown=elg:elg --from=jre-build /app/tagger-2.2.1-jar-with-dependencies.jar /elg/
 COPY --chown=elg:elg app.py docker-entrypoint.sh lv-ner.prop /elg/
 ENV PATH="/opt/venv/bin:$PATH"
 
-ENV WORKERS=2
+ENV WORKERS=1
 ENV TIMEOUT=60
 ENV WORKER_CLASS=sync
 ENV LOGURU_LEVEL=INFO
