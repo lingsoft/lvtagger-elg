@@ -3,19 +3,16 @@
 This git repository contains
 [ELG compatible](https://european-language-grid.readthedocs.io/en/stable/all/A3_API/LTInternalAPI.html)
 Flask based REST API for [LV Tagger](https://github.com/PeterisP/LVTagger) – morphological
-tagger and named entity recognition module for the Latvian language (v. 2.2.1).
+tagger for the Latvian language (v. 2.2.1).
 LV Tagger is licensed under the
 [full GPL](https://github.com/PeterisP/LVTagger/blob/master/LICENSE.txt).
 The software was developed by Pēteris Paikens from the University of Latvia,
 Institute of Mathematics and Computer science.
 
-You can call two endpoints: `tagger` and `ner`.
-`tagger` groups tokens by their part of speech, which is the first letter of
+The tagger groups tokens by their part of speech, which is the first letter of
 the morphological tag, shows their starting and ending indexes, lemma ('Pamatforma')
 and other morphological information depending on the part of speech
 (e.g. 'Skaitlis' (number), 'Locījums' (case), 'Dzimte' (gender), etc).
-`ner` groups tokens by their named entity label (person, organization, location,
-event, product, profession) and shows their starting and ending indexes.
 
 This ELG API was developed in EU's CEF project
 [Microservices at your service](https://www.lingsoft.fi/en/microservices-at-your-service-bridging-gap-between-nlp-research-and-industry).
@@ -41,24 +38,22 @@ FLASK_ENV=development flask run --host 0.0.0.0 --port 8000
 ## Building the docker image
 
 ```
-docker build -t lvtagger .
+docker build -t lv-tagger .
 ```
 
-Or pull directly ready-made image `docker pull lingsoft/lvtagger:2.2.1-elg`.
+Or pull directly ready-made image `docker pull lingsoft/lv-tagger:2.2.1-elg`.
 
 ## Deploying the service
 
 ```
-docker run -d -p <port>:8000 --init lvtagger
+docker run -d -p <port>:8000 --init lv-tagger
 ```
 
 ## Example call
 
 ```
-curl -H 'Content-Type: application/json' -d @sample.json http://localhost:8000/process/<endpoint>
+curl -H 'Content-Type: application/json' -d @sample.json http://localhost:8000/process/tagger
 ```
-
-`endpoint` can be `tagger` or `ner`.
 
 ### sample.json
 
@@ -70,8 +65,6 @@ curl -H 'Content-Type: application/json' -d @sample.json http://localhost:8000/p
 ```
 
 ### Response
-
-#### Tagger
 
 ```json
 {
@@ -114,52 +107,6 @@ curl -H 'Content-Type: application/json' -d @sample.json http://localhost:8000/p
 
 More information about
 [part-of-speech tags](https://peteris.rocks/blog/latvian-part-of-speech-tagging/).
-
-#### NER
-
-```json
-{
-  "response": {
-    "type": "annotations",
-    "annotations": {
-      "person": [
-        {
-          "start": 0,
-          "end": 7
-        },
-        {
-          "start": 8,
-          "end": 15
-        }
-      ],
-      "time": [
-        {
-          "start": 26,
-          "end": 31
-        },
-        {
-          "start": 32,
-          "end": 36
-        },
-        {
-          "start": 37,
-          "end": 40
-        },
-        {
-          "start": 41,
-          "end": 49
-        }
-      ],
-      "location": [
-        {
-          "start": 51,
-          "end": 55
-        }
-      ]
-    }
-  }
-}
-```
 
 ## Warning
 
