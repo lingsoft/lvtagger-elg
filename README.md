@@ -2,7 +2,7 @@
 
 This git repository contains
 [ELG compatible](https://european-language-grid.readthedocs.io/en/stable/all/A3_API/LTInternalAPI.html)
-Flask based REST API for [LV Tagger](https://github.com/PeterisP/LVTagger) – morphological
+Flask based REST API for [LV Tagger](https://github.com/PeterisP/LVTagger) – a morphological
 tagger for the Latvian language (v. 2.2.1).
 LV Tagger is licensed under the
 [full GPL](https://github.com/PeterisP/LVTagger/blob/master/LICENSE.txt).
