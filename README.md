@@ -1,4 +1,4 @@
-# ELG API for LV Tagger – Latvian morphological tagger and named entity recognition module
+# ELG API for LV Tagger – Latvian morphological tagger
 
 This git repository contains
 [ELG compatible](https://european-language-grid.readthedocs.io/en/stable/all/A3_API/LTInternalAPI.html)
