@@ -58,7 +58,12 @@ class LVTagger(FlaskService):
     def process_text(self, request: TextRequest):
         content = request.content + "\n"
         if content == "\n":
-            return AnnotationsResponse(annotations={})
+            emptyInput_warning_msg = StatusMessage(
+                code='lingsoft.input.empty',
+                params=[],
+                text='Input text is empty'
+            )
+            return AnnotationsResponse(annotations={}, warnings=[emptyInput_warning_msg])
         if len(content) > MAX_CHAR:
             error = StandardMessages.generate_elg_request_too_large()
             return Failure(errors=[error])
