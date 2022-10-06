@@ -9,8 +9,7 @@ LV Tagger is licensed under the
 The software was developed by Pēteris Paikens from the University of Latvia,
 Institute of Mathematics and Computer science.
 
-The tagger groups tokens by their part of speech, which is the first letter of
-the morphological tag, shows their starting and ending indexes, lemma ('Pamatforma')
+The tagger groups tokens by their part of speech, shows their starting and ending indexes, lemma ('Pamatforma')
 and other morphological information depending on the part of speech
 (e.g. 'Skaitlis' (number), 'Locījums' (case), 'Dzimte' (gender), etc).
 
@@ -71,7 +70,7 @@ curl -H 'Content-Type: application/json' -d @sample.json http://localhost:8000/p
   "response": {
     "type": "annotations",
     "annotations": {
-      "n": [
+      "Noun": [
         {
           "start": 0,
           "end": 7,
