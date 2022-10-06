@@ -35,7 +35,7 @@ class TestTaggerIntegration(unittest.TestCase):
 
     def test_tagger_response_content(self):
         response = call_api(self.endpoint, self.text)
-        for entity in ("n", "v", "x", "z"):
+        for entity in ("Noun", "Verb", "Residual", "Punctuation"):
             self.assertIn(entity, response["response"]["annotations"])
 
     def test_tagger_with_empty_request(self):
