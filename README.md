@@ -34,6 +34,11 @@ Run the development mode flask app
 FLASK_ENV=development flask run --host 0.0.0.0 --port 8000
 ```
 
+Tests
+```
+python -m unittest tests/test_integration.py -v
+```
+
 ## Building the docker image
 
 ```
