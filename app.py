@@ -18,7 +18,11 @@ MAX_TOKEN_LENGTH = 100
 
 
 class LVTagger(FlaskService):
-
+    
+    pos_dict = {"n": "Noun", "v": "Verb", "a": "Adjective", "p": "Pronoun", "r": "Adverb",\
+                "s": "Preposition", "c": "Conjunction", "m": "Numeral", "i": "Interjection",\
+                "y": "Abbreviation", "q": "Particle", "z": "Punctuation", "x": "Residual"}
+    
     def convert_outputs(self, outputs, content, endpoint):
         annotations = {}
         offset = 0
@@ -37,6 +41,8 @@ class LVTagger(FlaskService):
             feature_dict["tag1"] = tag1
             feature_dict["tag2"] = features[1]
             pos = tag1[0]
+            if pos in pos_dict:
+                pos = pos_dict[pos]
             if len(features) > 2:
                 features_split = features[2].split("|")
                 for x in features_split:
