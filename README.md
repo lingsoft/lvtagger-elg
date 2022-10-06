@@ -40,7 +40,7 @@ FLASK_ENV=development flask run --host 0.0.0.0 --port 8000
 docker build -t lv-tagger .
 ```
 
-Or pull directly ready-made image `docker pull lingsoft/lv-tagger:2.2.1-elg`.
+Or pull directly ready-made image `docker pull lingsoft/lv-tagger:2.2.2-elg`.
 
 ## Deploying the service
 
