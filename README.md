@@ -45,7 +45,7 @@ python -m unittest tests/test_integration.py -v
 docker build -t lv-tagger .
 ```
 
-Or pull directly ready-made image `docker pull lingsoft/lv-tagger:2.2.2-elg`.
+Or pull directly ready-made image `docker pull lingsoft/lv-tagger:2.2.1.1-elg`.
 
 ## Deploying the service
 
